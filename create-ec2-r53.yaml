@@ -47,14 +47,14 @@
       loop: "{{ ec2_output.results }}"
       when: item.item not in public_record
 
-      - name: create/update r53 record (private ip)         
-        amazon.aws.route53:
-        state: present
-        zone: "{{ server_zone }}"
-        record: "{{ item.item }}.{{ server_zone }}"
-        type: A
-        ttl: 1
-        value: "{{ item.instances[0].public_ip_address }}."    
-        overwrite: true
-      loop: "{{ ec2_output.results }}"
-      when: item.item not in public_record
+    - name: create/update r53 record (private ip)         
+      amazon.aws.route53:
+      state: present
+      zone: "{{ server_zone }}"
+      record: "{{ item.item }}.{{ server_zone }}"
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}."    
+      overwrite: true
+    loop: "{{ ec2_output.results }}"
+    when: item.item not in public_record
