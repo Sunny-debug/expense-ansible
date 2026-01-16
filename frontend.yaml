@@ -27,7 +27,7 @@
     - name: download the application code
       ansible.builtin.get_url:
         url: https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip 
-        dest_dir: /tmp/frontend.zip
+        dest: /tmp/frontend.zip
 
     - name: extract the frontend content
       ansible.builtin.unarchive:
