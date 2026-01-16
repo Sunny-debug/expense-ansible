@@ -10,6 +10,7 @@
     security_id: sg-0ff527a822e6f1e16
     record_name: "mysql"
     server_zone: dawgs.online
+    region_id: us-east-1
 
   tasks:
     - name: Create EC2 instance
