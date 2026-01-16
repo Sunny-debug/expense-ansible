@@ -8,7 +8,7 @@
     image_id: ami-0220d79f3f480ecf5
     instance_type: t3.micro
     security_id: sg-0ff527a822e6f1e16
-    record_name: "mysql"
+    record_name: ["mysql","backend"]
     server_zone: dawgs.online
     region_id: us-east-1
 
@@ -24,9 +24,9 @@
         state: present
       register: ec2_output
 
-    - name: print the output
-      ansible.builtin.debug:
-        var: ec2_output 
+    # - name: print the output
+    #   ansible.builtin.debug:
+    #     var: ec2_output 
 
     - name: create r53 record
       amazon.aws.route53:
