@@ -59,7 +59,7 @@
       loop: "{{ ec2_output.results }}"
       when: item.item not in public_record
 
-      - name: create/update r53 record (frontend public ip)
+    - name: create/update r53 record (frontend public ip)
       amazon.aws.route53:
         state: present
         zone: "{{ domain_name }}"
