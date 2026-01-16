@@ -1,24 +1,30 @@
 ---
-- name: Provision EC2 instance and update r53
+- name: create instance and update record
   hosts: localhost
-  connection: local
-  gather_facts: no
-  vars: 
-    region: us-east-1
-    image_id: ami-0220d79f3f480ecf5
+  become: yes
+  gather_facts: false
+
+  vars:
+    region_id: us-east-1
+    image_id: create-ec2-r53.yaml
     instance_type: t3.micro
     security_id: sg-0ff527a822e6f1e16
-    public_record:
-      - mysql
-      - backend
-    private_record:
-      - frontend  
     server_zone: dawgs.online
-    region_id: us-east-1
+
+    instances: [] #default /  can be overridden from CLI
+
+    public_record: ["frontend"]
 
   tasks:
-    - name: Create EC2 instance
-      amazon.aws.ec2_instance: 
+    - name: Fail if no instances are provided
+      ansible.builtin.assert:  
+        that:
+         -  instances | length > 0
+        fail_msg: "pass instance names as a list"
+
+    - name: create ec2 instances
+      amazon.aws.ec2_instance:
+        name: "{{ item }}"
         image_id: "{{ image_id }}"
         instance_type: "{{ instance_type }}"
         security_group: "{{ security_id }}"
@@ -26,31 +32,29 @@
         tags:
           Name: "{{ item }}"
         state: present
-      loop: "{{ record_name }}"  
+      loop: "{{ instances }}"
       register: ec2_output
 
-    # - name: print the output
-    #   ansible.builtin.debug:
-    #     var: ec2_output 
-
-    - name: create r53 record
-      amazon.aws.route53:
-        state: present 
-        zone: "{{ server_zone }}"
-        record: "{{ item.item }}.{{ server_zone }}"
-        type: A
-        ttl: 1
-        value: "{{ item.instances[0].private_ip_address }}"
-        overwrite: true
-      loop: "{{ ec2_output.results }}"         
-
-    - name: create record for route53 #Punlic IP for frontend
+    - name: create/update r53 records(private_ip)
       amazon.aws.route53:
         state: present
         zone: "{{ server_zone }}"
         record: "{{ item.item }}.{{ server_zone }}"
         type: A
         ttl: 1
-        value: "{{ item.instance[0].public_ip_address }}"
+        value: "{{ item.instances[0].private_ip_address }}."    
+        overwrite: True
+      loop: "{{ ec2_output.results }}"
+      when: item.item not in public_record
+
+      - name: create/update r53 record (private ip)         
+        amazon.aws.route53:
+        state: present
+        zone: "{{ server_zone }}"
+        record: "{{ item.item }}.{{ server_zone }}"
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].public_ip_address }}."    
         overwrite: true
-      loop: "{{ ec2_output.results }}"  
+      loop: "{{ ec2_output.results }}"
+      when: item.item not in public_record
