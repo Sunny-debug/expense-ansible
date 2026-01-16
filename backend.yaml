@@ -25,7 +25,8 @@
 
     - name: delete backend file
       ansible.builtin.file:
-        path: /tmp/expense-backend-v2.zip    
+        path: /tmp/expense-backend-v2.zip 
+        state: present   
 
     - name: download the app    
       ansible.builtin.get_url:
