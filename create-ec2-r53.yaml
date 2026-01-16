@@ -1,7 +1,7 @@
 ---
 - name: create instance and update record
   hosts: localhost
-  become: yes
+  connection: local
   gather_facts: false
 
   vars:
