@@ -22,3 +22,48 @@
         path: /app
         state: directory
         mode: '0755'    
+
+    - name: download the app    
+      ansible.builtin.get_url:
+        url: curl -o /tmp/backend.zip https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /app
+
+    - name: unzip app code
+      ansible.builtin.unarchieve:
+        src: /tmp/backend.zip
+        dest: /app
+
+    - name: Install nodejs package
+      community.general.npm:
+        path: /app
+
+    - name: copy service file
+      ansible.builtin.copy:
+        src: backend.yaml
+        dest: /etc/systemd/system/backend.service
+
+    - name: daemon-reload
+      ansible.builtin.command: systemctl daemon-reload
+
+    - name: enable and start service
+      ansible.builtin.service:
+        name: backend
+        state: started
+        enabled: yes
+
+    - name: install mysql client
+      ansible.builtin.command: dnf install mysql -y
+
+    - name: load schemas
+      ansible.builtin.shell: mysql -h mysql.dawgs.online -uroot -pExpenseApp@1 < /app/schema/backend.sql  
+
+    - name: daemon-reload
+      ansible.builtin.command: systemctl daemon-reload
+
+    - name: enable and start service
+      ansible.builtin.service:
+        name: backend
+        state: started
+        enabled: yes 
+
+
