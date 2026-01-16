@@ -18,4 +18,4 @@
         enabled: true     
 
     - name: change root password
-      ansinle.builtin.command: mysql_secure_installation --set-root-pass ExpenseApp@1    
+      ansible.builtin.command: mysql_secure_installation --set-root-pass ExpenseApp@1    
