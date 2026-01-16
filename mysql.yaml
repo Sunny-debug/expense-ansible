@@ -8,6 +8,9 @@
         name: mysql-server
         state: present
 
+    - name: reload daemon
+      ansible.builtin.command: systemctl daemon-reload 
+      
     - name: enable and start service
       ansible.builtin.service:
         name: mysql

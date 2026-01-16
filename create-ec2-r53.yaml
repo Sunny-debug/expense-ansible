@@ -8,7 +8,7 @@
     image_id: ami-0220d79f3f480ecf5
     instance_type: t3.micro
     security_id: sg-0ff527a822e6f1e16
-    record_name: ["mysql","backend"]
+    record_name: ["mysql"]
     server_zone: dawgs.online
     region_id: us-east-1
 
