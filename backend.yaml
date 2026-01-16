@@ -25,7 +25,8 @@
 
     - name: download the app    
       ansible.builtin.get_url:
-        url: curl -o /tmp/backend.zip https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        url: curl -o https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        src: /tmp/backend.zip
         dest: /app
 
     - name: unzip app code
