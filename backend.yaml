@@ -23,16 +23,20 @@
         state: directory
         mode: '0755'    
 
+    - name: delete backend file
+      ansible.builtin.file:
+        path: /tmp/expense-backend-v2.zip    
+
     - name: download the app    
       ansible.builtin.get_url:
-        url: curl -o https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-        src: /tmp/backend.zip
-        dest: /app
+        url: https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /tmp/expense-backend-v2.zip
 
     - name: unzip app code
       ansible.builtin.unarchive:
-        src: /tmp/backend.zip
+        src: /tmp/expense-backend-v2.zip
         dest: /app
+        remote_src: yes
 
     - name: Install nodejs package
       community.general.npm:
