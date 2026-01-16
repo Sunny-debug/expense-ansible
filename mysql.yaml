@@ -10,9 +10,9 @@
 
     - name: reload daemon
       ansible.builtin.command: systemctl daemon-reload 
-      
+
     - name: enable and start service
       ansible.builtin.service:
         name: mysql
         state: started
-        enable: true     
+        enabled: true     
