@@ -23,8 +23,8 @@
           Name: "{{ record_name }}"
         state: present
       register: ec2_output
-      - debug:
-        var: ec2_output
+    - debug:
+      var: ec2_output
 
 
     - name: create r53 record
