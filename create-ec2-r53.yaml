@@ -9,7 +9,7 @@
     image_id: ami-0220d79f3f480ecf5
     instance_type: t3.micro
     security_id: sg-0ff527a822e6f1e16
-    server_zone: dawgs.online
+    domain_name: dawgs.online
 
     instances: [] #default /  can be overridden from CLI
 
@@ -38,8 +38,8 @@
     - name: create/update r53 records(private_ip)
       amazon.aws.route53:
         state: present
-        zone: "{{ server_zone }}"
-        record: "{{ item.item }}.{{ server_zone }}"
+        zone: "{{ domain_nam }}"
+        record: "{{ item.item }}.{{ domain_nam }}"
         type: A
         ttl: 1
         value: "{{ item.instances[0].private_ip_address }}"    
@@ -50,8 +50,8 @@
     - name: create/update r53 record (private ip)         
       amazon.aws.route53:
         state: present
-        zone: "{{ server_zone }}"
-        record: "{{ item.item }}.{{ server_zone }}"
+        zone: "{{ domain_nam }}"
+        record: "{{ item.item }}.{{ domain_nam }}"
         type: A
         ttl: 1
         value: "{{ item.instances[0].public_ip_address }}"    
