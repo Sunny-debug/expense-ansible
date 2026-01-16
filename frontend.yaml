@@ -1,4 +1,3 @@
----
 - name: configure nginx
   hosts: frontend
   become: yes
@@ -44,6 +43,4 @@
     - name: enable and start the service
       ansible.builtin.service:
         name: nginx
-        state: restarted
-
----            
+        state: restarted         
