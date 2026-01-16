@@ -45,7 +45,7 @@
 
     - name: copy service file
       ansible.builtin.copy:
-        src: backend.yaml
+        src: backend.service
         dest: /etc/systemd/system/backend.service
 
     - name: daemon-reload
